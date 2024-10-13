@@ -1,10 +1,9 @@
 defmodule RBSetTest do
   @moduledoc """
-  Testing RBSet
+  Unit-testing RBSet
   """
 
   use ExUnit.Case, async: true
-
   import RBSet
   doctest RBSet
 
