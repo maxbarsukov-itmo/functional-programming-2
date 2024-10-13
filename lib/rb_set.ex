@@ -22,7 +22,7 @@ defmodule RBSet do
   end
 
   @doc """
-  Creates a set from an enumerable..
+  Creates a set from an enumerable.
 
   See MapSet `new/1` at [hexdocs](https://hexdocs.pm/elixir/1.17/MapSet.html#new/1)
   """
