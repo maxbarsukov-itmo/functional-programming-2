@@ -15,8 +15,5 @@
   "MD024": false,
 
   // Cause I love inlining a little HTML in my markdown.
-  "MD033": false,
-
-  // Uhh, some bugs with links in headers
-  "MD034": false
+  "MD033": false
 }

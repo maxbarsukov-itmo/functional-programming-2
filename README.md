@@ -301,7 +301,7 @@ def reduce(tree, acc, fun) do
 end
 ```
 
-### Соответствие свойству [моноида]((https://ru.m.wikipedia.org/wiki/%D0%9C%D0%BE%D0%BD%D0%BE%D0%B8%D0%B4))
+### Соответствие свойству [моноида](https://ru.m.wikipedia.org/wiki/%D0%9C%D0%BE%D0%BD%D0%BE%D0%B8%D0%B4)
 
 Определили пустой элемент:
 
