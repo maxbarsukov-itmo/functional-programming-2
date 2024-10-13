@@ -13,9 +13,6 @@ defmodule FpLab2.MixProject do
       elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
       preferred_cli_env: [
-        # Testing
-        espec: :test,
-
         # Test coverage
         coveralls: :test,
         "coveralls.detail": :test,
@@ -47,14 +44,11 @@ defmodule FpLab2.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "spec/support"]
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
   defp deps do
     [
-      # Testing
-      {:espec, "~> 1.9.2", only: :test},
-
       # Test coverage
       {:excoveralls, "~> 0.18", only: :test},
 
@@ -66,9 +60,7 @@ defmodule FpLab2.MixProject do
   end
 
   def aliases do
-    [
-      test: "espec"
-    ]
+    []
   end
 
   def description do
