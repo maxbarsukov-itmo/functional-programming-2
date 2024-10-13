@@ -13,13 +13,13 @@ defmodule RedBlackTree.Node do
   )
 
   @type t :: %__MODULE__{
-    color: :red | :black,
-    depth: pos_integer(),
-    key: any,
-    value: any,
-    left: t | nil,
-    right: t | nil
-  }
+          color: :red | :black,
+          depth: pos_integer(),
+          key: any,
+          value: any,
+          left: t | nil,
+          right: t | nil
+        }
 
   def new(key, value, depth \\ 1) do
     %__MODULE__{key: key, value: value, depth: depth}

@@ -8,8 +8,8 @@ defmodule RedBlackTree do
   alias RedBlackTree.Node
 
   @type t :: %__MODULE__{
-    root: Node.t | nil
-  }
+          root: Node.t() | nil
+        }
 
   defstruct root: nil, size: 0, comparator: &__MODULE__.compare_terms/2
 
@@ -24,6 +24,7 @@ defmodule RedBlackTree do
   def empty, do: new()
   def new, do: %RedBlackTree{}
   def new(values, opts \\ [])
+
   def new(values, opts) do
     do_new(
       %RedBlackTree{
@@ -89,6 +90,7 @@ defmodule RedBlackTree do
   end
 
   def reduce(%RedBlackTree{root: nil}, acc, _fun), do: acc
+
   def reduce(tree, acc, fun) do
     to_list(tree) |> fold_right(acc, fun)
   end
@@ -99,6 +101,7 @@ defmodule RedBlackTree do
 
   def fold_left(list, acc, fun), do: do_fold_left(list, acc, fun)
   defp do_fold_left([], acc, _fun), do: acc
+
   defp do_fold_left([head | tail], acc, fun) do
     new_acc = fun.(acc, head)
     do_fold_left(tail, new_acc, fun)
@@ -106,6 +109,7 @@ defmodule RedBlackTree do
 
   def fold_right(list, acc, fun), do: do_fold_right(list, acc, fun)
   defp do_fold_right([], acc, _fun), do: acc
+
   defp do_fold_right([head | tail], acc, fun) do
     do_fold_right(tail, fun.(head, acc), fun)
   end
@@ -113,6 +117,7 @@ defmodule RedBlackTree do
   @spec union(t(), t()) :: t
   def union(%RedBlackTree{root: nil} = _tree1, %RedBlackTree{} = tree2), do: tree2
   def union(%RedBlackTree{} = tree1, %RedBlackTree{root: nil}), do: tree1
+
   def union(%RedBlackTree{} = tree1, %RedBlackTree{} = tree2) do
     RedBlackTree.reduce(tree1, tree2, fn {k, v}, acc -> RedBlackTree.insert(acc, k, v) end)
   end

@@ -8,8 +8,8 @@ defmodule RBSet do
   defstruct tree: %RedBlackTree{}
 
   @type t :: %__MODULE__{
-    tree: RedBlackTree.t | nil
-  }
+          tree: RedBlackTree.t() | nil
+        }
 
   @doc """
   Returns a new set.
