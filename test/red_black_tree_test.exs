@@ -7,9 +7,16 @@ defmodule RedBlackTreeTest do
   alias RedBlackTree.Node
   doctest RedBlackTree
 
+  setup do
+    tree = RedBlackTree.new()
+    {:ok, tree: tree}
+  end
+
   test "initializing a red black tree" do
     assert %RedBlackTree{} == RedBlackTree.new()
+    assert %RedBlackTree{} == RedBlackTree.empty()
     assert 0 == RedBlackTree.new().size
+    assert 0 == RedBlackTree.empty().size
 
     assert [{1, 1}, {2, 2}, {:c, :c}] == RedBlackTree.to_list(RedBlackTree.new([1, 2, :c]))
     assert [{1, 1}, {2, 2}, {:c, :c}] == RedBlackTree.to_list(RedBlackTree.new([1, 2, :c]))
@@ -98,6 +105,45 @@ defmodule RedBlackTreeTest do
 
     assert %{a: 3, b: 2, c: 3, d: 1, e: 3, f: 2, g: 3} ==
              RedBlackTree.reduce_nodes(unchanged_tree, %{}, depth_aggregator)
+  end
+
+  test "insert and get", %{tree: tree} do
+    tree = RedBlackTree.insert(tree, :a, 1)
+    assert RedBlackTree.get(tree, :a) == 1
+    assert RedBlackTree.get(tree, :b) == nil
+  end
+
+  test "insert and member?", %{tree: tree} do
+    tree = RedBlackTree.insert(tree, :a, 1)
+    assert RedBlackTree.member?(tree, :a) == true
+    assert RedBlackTree.member?(tree, :b) == false
+  end
+
+  test "pop", %{tree: tree} do
+    tree = RedBlackTree.insert(tree, :a, 1)
+    {value, new_tree} = RedBlackTree.pop(tree, :a)
+    assert value == 1
+    assert RedBlackTree.member?(new_tree, :a) == false
+  end
+
+  test "fold_left", %{tree: tree} do
+    tree = RedBlackTree.insert(tree, :a, 1) |> RedBlackTree.insert(:b, 2)
+    result = RedBlackTree.fold_left(RedBlackTree.to_list(tree), 0, fn acc, {_, v} -> acc + v end)
+    assert result == 3
+  end
+
+  test "fold_right", %{tree: tree} do
+    tree = RedBlackTree.insert(tree, :a, 1) |> RedBlackTree.insert(:b, 2)
+    result = RedBlackTree.fold_right(RedBlackTree.to_list(tree), 0, fn {_, v}, acc -> acc + v end)
+    assert result == 3
+  end
+
+  test "Enumerable implementation", %{tree: tree} do
+    tree = RedBlackTree.insert(tree, :a, 1)
+    tree = RedBlackTree.insert(tree, :b, 2)
+    assert Enum.count(tree) == 2
+    assert Enum.member?(tree, :a) == true
+    assert Enum.member?(tree, :c) == false
   end
 
   test "reduce_nodes" do
