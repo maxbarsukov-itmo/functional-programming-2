@@ -49,6 +49,9 @@ defmodule FpLab2.MixProject do
 
   defp deps do
     [
+      # Testing
+      {:quixir, "~> 0.9", only: :test},
+
       # Test coverage
       {:excoveralls, "~> 0.18", only: :test},
 
