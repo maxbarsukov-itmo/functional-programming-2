@@ -122,6 +122,12 @@ defmodule RedBlackTreeTest do
     assert RedBlackTree.member?(tree, :b) == false
   end
 
+  test "insert for floats" do
+    tree = RedBlackTree.new() |> RedBlackTree.insert(1, :bubbles)
+    updated = RedBlackTree.insert(tree, 1.0, :walrus)
+    assert RedBlackTree.size(updated) == 2
+  end
+
   test "pop", %{tree: tree} do
     tree = RedBlackTree.insert(tree, :a, 1)
     {value, new_tree} = RedBlackTree.pop(tree, :a)
@@ -134,7 +140,9 @@ defmodule RedBlackTreeTest do
 
     tree = RedBlackTree.insert(tree, :a, 1) |> RedBlackTree.insert(:b, 2)
     result = RedBlackTree.reduce(tree, 0, fn {_, v}, acc -> acc + v end)
+    result_l = RedBlackTree.reduce_left(tree, 0, fn acc, {_, v} -> acc + v end)
     assert result == 3
+    assert result_l == 3
   end
 
   test "fold_left", %{tree: tree} do
@@ -158,6 +166,9 @@ defmodule RedBlackTreeTest do
   end
 
   test "reduce_nodes" do
+    assert RedBlackTree.reduce_nodes(RedBlackTree.new(), :unchanged, fn el, acc -> acc + el end) ==
+             :unchanged
+
     initial_tree = RedBlackTree.new(d: 1, b: 2, f: 3, g: 4, c: 5, a: 6, e: 7)
 
     aggregator = fn %Node{key: key}, acc ->
