@@ -74,6 +74,7 @@ defmodule RedBlackTreeTest do
     assert 7 == RedBlackTree.get(tree, :e)
     assert 4 == RedBlackTree.get(tree, :g)
     assert 5 == RedBlackTree.get(tree, :c)
+    assert 100_500 == RedBlackTree.get(tree, :no_such_key, 100_500)
   end
 
   test "delete" do
@@ -109,8 +110,10 @@ defmodule RedBlackTreeTest do
 
   test "insert and get", %{tree: tree} do
     tree = RedBlackTree.insert(tree, :a, 1)
+    tree = RedBlackTree.insert(tree, :c)
     assert RedBlackTree.get(tree, :a) == 1
     assert RedBlackTree.get(tree, :b) == nil
+    assert RedBlackTree.get(tree, :c) == nil
   end
 
   test "insert and member?", %{tree: tree} do
@@ -124,6 +127,14 @@ defmodule RedBlackTreeTest do
     {value, new_tree} = RedBlackTree.pop(tree, :a)
     assert value == 1
     assert RedBlackTree.member?(new_tree, :a) == false
+  end
+
+  test "reduce", %{tree: tree} do
+    assert RedBlackTree.reduce(RedBlackTree.new(), 100, fn el, acc -> el + acc end) == 100
+
+    tree = RedBlackTree.insert(tree, :a, 1) |> RedBlackTree.insert(:b, 2)
+    result = RedBlackTree.reduce(tree, 0, fn {_, v}, acc -> acc + v end)
+    assert result == 3
   end
 
   test "fold_left", %{tree: tree} do
