@@ -137,9 +137,43 @@ defmodule RBSetTest do
     assert Enum.slice(set1, 1..3) == [2, 3, 4]
   end
 
-  test "implements Into" do
-    map_set = Enum.into(RBSet.new([5, 1, 4, 2, 3]), MapSet.new())
-    assert map_set == MapSet.new([1, 2, 3, 4, 5])
+  test "collectable into RBSet" do
+    assert 5 == Enum.into(RBSet.new([5, 1, 4, 2, 3]), MapSet.new()) |> MapSet.size()
+
+    initial_set = RBSet.new([1, 2, 3])
+    elements_to_add = [4, 5, 6]
+    result_set = Enum.into(elements_to_add, initial_set)
+    expected_set = RBSet.new([1, 2, 3, 4, 5, 6])
+    assert result_set == expected_set
+  end
+
+  test "collectable into RBSet with duplicates" do
+    initial_set = RBSet.new([1, 2, 3])
+    elements_to_add = [3, 4, 5, 3]
+    result_set = Enum.into(elements_to_add, initial_set)
+    expected_set = RBSet.new([1, 2, 3, 4, 5])
+    assert result_set == expected_set
+  end
+
+  test "collector function directly" do
+    initial_set = RBSet.new([1, 2, 3])
+    {set, collector_fun} = Collectable.into(initial_set)
+
+    # Test adding an element
+    set = collector_fun.(set, {:cont, 4})
+    assert set == RBSet.new([1, 2, 3, 4])
+
+    # Test adding a duplicate element
+    set = collector_fun.(set, {:cont, 3})
+    assert set == RBSet.new([1, 2, 3, 4])
+
+    # Test completing the collection
+    final_set = collector_fun.(set, :done)
+    assert final_set == RBSet.new([1, 2, 3, 4])
+
+    # Test halting the collection
+    halt_result = collector_fun.(set, :halt)
+    assert halt_result == :ok
   end
 
   test "implements Inspect", %{empty_set: empty_set} do
